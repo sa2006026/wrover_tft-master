@@ -23,6 +23,8 @@ SimpleKalmanFilter kf = SimpleKalmanFilter(0.5, 0.5, 0.01);
 // #define FRAME_TOPY    25
 // #define FRAME_WIDTH   230
 // #define FRAME_HEIGHT  110
+float HighY = 60;
+float LowY = 40;
 
 void setup() {
   Wire.begin();
@@ -60,19 +62,47 @@ void loop() {
 
 
   if(T>2000){
-  
-    graph1.scroll(-1); // Move sprite content 1 pixel left. Default dy is 0
 
-    graph1.drawFastVLine(199,100 - F,3 , TFT_YELLOW);
+  
+
+    if(F>HighY){
+      
+      // LowY = LowY +20;
+      // if(F<HighY){
+       
+      graph1.scroll(-1,50);
+      HighY = HighY +20;
+      // LowY = LowY +20;
+    }
+    else{
+        graph1.drawFastVLine(199,100-100*((F-LowY)/(HighY-LowY)),3,TFT_YELLOW);
+        graph1.scroll(-1);
+      }
+    if(HighY == 80 && F<60){
+    
+        graph1.scroll(-1,-50);
+        HighY = HighY -20;
+      
+    }
+      
+      // LowY = LowY +20;
+      // if(F<HighY){
+       
+
+      // }
+    
+    graph1.pushSprite(20, 32);
+     // Move sprite content 1 pixel left. Default dy is 0
+    
   // graph2.scroll(1); // Move sprite content 1 pixel right. Default dy is 0
   // graph2.drawFastVLine(0,64-graph2Val,graph2Val,TFT_RED);
-    graph1.pushSprite(20, 32);
+    
   }
   tft.drawString("Humidity",1, 5,2);
-  tft.drawString("100",1, 32);
-  tft.drawString("0",10, 132);
+  tft.drawFloat(float(HighY),0,1, 32,1);
+  tft.drawFloat(float(LowY),0,10, 132,1);
   // graph2.pushSprite(0, 96);
-  tft.drawFloat(float(H), 1, 70, 180, 6);
+  tft.drawFloat(float(F), 1, 70, 180, 6);
   tft.drawFloat(float(adc0), 1, 70, 260, 1);
   
 
